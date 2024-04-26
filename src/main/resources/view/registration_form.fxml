@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="538.0" prefWidth="823.0" styleClass="backgroundColour2" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.gdse.Controller.RegistrationFormController">
+    <children>
+      <ImageView fitHeight="696.0" fitWidth="906.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asserts.icon/RegistrationBackground.png" />
+         </image>
+      </ImageView>
+        <Label layoutX="204.0" layoutY="41.0" text="Registration Form" textFill="#040e11">
+            <font>
+                <Font name="System Bold Italic" size="36.0" />
+            </font>
+        </Label>
+        <TextField fx:id="txtUserId" layoutX="294.0" layoutY="139.0" prefHeight="34.0" prefWidth="331.0" promptText="Input your user id here" />
+        <TextField fx:id="txtPw" layoutX="294.0" layoutY="231.0" prefHeight="34.0" prefWidth="331.0" promptText="Input your password here" />
+        <TextField fx:id="txtName" layoutX="294.0" layoutY="186.0" prefHeight="34.0" prefWidth="331.0" promptText="Input your name here" />
+        <Label layoutX="185.0" layoutY="145.0" text="User ID:">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font></Label>
+        <Label layoutX="181.0" layoutY="192.0" text="Name:">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font></Label>
+        <Label layoutX="178.0" layoutY="240.0" text="Password:">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font></Label>
+        <JFXButton fx:id="btnRegister" buttonType="RAISED" layoutX="336.0" layoutY="348.0" onAction="#btnRegisterOnAction" prefHeight="34.0" prefWidth="168.0" style="-fx-background-color: #59981A;" text="Register Now" textFill="WHITE">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </JFXButton>
+      <ImageView fitHeight="125.0" fitWidth="109.0" layoutX="100.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asserts.icon/register.png" />
+         </image>
+      </ImageView>
+    </children>
+</AnchorPane>

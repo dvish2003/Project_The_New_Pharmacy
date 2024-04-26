@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootNode" prefHeight="538.0" prefWidth="823.0" styleClass="backgroundColour2" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.gdse.Controller.LoginFormController">
+    <children>
+        <ImageView fitHeight="564.0" fitWidth="848.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../asserts.icon/img.png" />
+            </image>
+        </ImageView>
+        <Label layoutX="296.0" layoutY="28.0" text="User Log On" textFill="#01141b">
+            <font>
+                <Font name="System Bold Italic" size="36.0" />
+            </font>
+        </Label>
+        <TextField fx:id="txtUserId" layoutY="194.0" prefHeight="41.0" prefWidth="277.0" promptText="Enter UserId" />
+        <TextField fx:id="txtPassword" layoutX="334.0" layoutY="250.0" prefHeight="41.0" prefWidth="277.0" promptText="Enter Password" />
+        <JFXButton fx:id="btnLogin" buttonType="RAISED" layoutX="300.0" layoutY="340.0" onAction="#btnLoginOnAction" prefHeight="32.0" prefWidth="225.0" style="-fx-background-color: #81B622;" text="Login" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="15.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+            <graphic>
+                <ImageView fitHeight="21.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../asserts.icon/login.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </JFXButton>
+        <Label layoutX="154.0" layoutY="420.0" text="Don't have an account?" textFill="#1613da" />
+        <Hyperlink fx:id="linkRegister" layoutX="309.0" layoutY="417.0" onAction="#linkRegisterOnAction" prefHeight="22.0" prefWidth="121.0" text="Register here" textFill="#2a60d3" />
+        <Label layoutX="195.0" layoutY="201.0" prefHeight="22.0" prefWidth="155.0" text="UserId:" textFill="#040e1e">
+            <font>
+                <Font name="System Bold Italic" size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="195.0" layoutY="259.0" text="Password:" textFill="#010914">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font></Label>
+        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="140.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../asserts.icon/login.png" />
+            </image>
+        </ImageView>
+        <Label layoutX="37.0" layoutY="147.0" text="Please enter your username and password" textFill="#1a5d8d">
+            <font>
+                <Font name="System Bold Italic" size="18.0" />
+            </font>
+        </Label>
+      <ImageView fitHeight="32.0" fitWidth="36.0" layoutX="164.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asserts.icon/username.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="165.0" layoutY="252.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asserts.icon/password.png" />
+         </image>
+      </ImageView>
+    </children>
+</AnchorPane>

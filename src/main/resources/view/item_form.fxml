@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="root" prefHeight="538.0" prefWidth="823.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.gdse.Controller.ItemFormController">
+    <children>
+      <ImageView fitHeight="781.0" fitWidth="977.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asserts.icon/ItemBackground.png" />
+         </image>
+      </ImageView>
+        <Label layoutX="385.0" layoutY="22.0" text="Item Manage">
+            <font>
+                <Font name="System Bold Italic" size="28.0" />
+            </font>
+        </Label>
+        <TextField fx:id="txtCode" layoutX="416.0" layoutY="64.0" prefHeight="35.0" prefWidth="245.0" promptText="Enter item code" />
+        <Label layoutX="263.0" layoutY="71.0" text="Item Code:">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font></Label>
+        <Label layoutX="263.0" layoutY="119.0" text="Description:">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font></Label>
+        <TextField fx:id="txtDescription" layoutX="416.0" layoutY="155.0" prefHeight="35.0" prefWidth="245.0" promptText="Enter item scale" />
+        <Label layoutX="263.0" layoutY="208.0" text="unit Price:">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font></Label>
+        <TextField fx:id="txtUnitPrice" layoutX="416.0" layoutY="109.0" prefHeight="35.0" prefWidth="245.0" promptText="Enter item description" />
+        <Label layoutX="263.0" layoutY="165.0" text="Scale:">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font></Label>
+        <TextField fx:id="txtQtyOnHand" layoutX="416.0" layoutY="198.0" prefHeight="35.0" prefWidth="245.0" promptText="Enter item price" />
+        <TableView fx:id="tblItem" layoutX="286.0" layoutY="286.0" prefHeight="253.0" prefWidth="691.0">
+            <columns>
+                <TableColumn fx:id="colCode" prefWidth="75.0" text="Code" />
+                <TableColumn fx:id="colDescription" prefWidth="229.0" text="Description" />
+                <TableColumn fx:id="colScale" prefWidth="119.0" text="Scale" />
+                <TableColumn fx:id="colUnitPrice" prefWidth="130.0" text="Unit Price" />
+                <TableColumn fx:id="colStockId" prefWidth="151.0" text="Stock Id" />
+            </columns>
+        </TableView>
+      <ComboBox fx:id="comStockId" layoutX="416.0" layoutY="241.0" onAction="#comStockIdOnAction" prefHeight="29.0" prefWidth="207.0" promptText="Select stock id" />
+      <Label layoutX="263.0" layoutY="245.0" text="Stock Id:">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="btnSave" layoutX="24.0" layoutY="330.0" onAction="#btnSaveOnAction" prefHeight="29.0" prefWidth="254.0" style="-fx-background-color: #75E6DA#75E6DA;" text="Save" />
+      <JFXButton fx:id="btnUpdate" layoutX="24.0" layoutY="373.0" onAction="#btnUpdateOnAction" prefHeight="29.0" prefWidth="254.0" style="-fx-background-color: #75E6DA;" text="Update" />
+      <JFXButton fx:id="btnDelete" layoutX="24.0" layoutY="413.0" onAction="#btnDeleteOnAction" prefHeight="29.0" prefWidth="254.0" style="-fx-background-color: #75E6DA;" text="Delete" />
+      <JFXButton fx:id="btnClear" layoutX="24.0" layoutY="451.0" onAction="#btnClearOnAction" prefHeight="29.0" prefWidth="254.0" style="-fx-background-color: #75E6DA;" text="Clear" />
+      <JFXButton fx:id="btnDashboard" layoutX="24.0" layoutY="488.0" onAction="#btnDashboardOnAction" prefHeight="29.0" prefWidth="254.0" style="-fx-background-color: #75E6DA;" text="Dashboard" />
+      <ImageView fitHeight="21.0" fitWidth="25.0" layoutX="90.0" layoutY="334.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asserts.icon/save.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="21.0" fitWidth="25.0" layoutX="89.0" layoutY="377.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asserts.icon/update.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="21.0" fitWidth="25.0" layoutX="91.0" layoutY="417.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asserts.icon/Delete.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="21.0" fitWidth="25.0" layoutX="91.0" layoutY="455.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asserts.icon/clean.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="21.0" fitWidth="25.0" layoutX="89.0" layoutY="492.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asserts.icon/dashboard.png" />
+         </image>
+      </ImageView>
+    </children>
+</AnchorPane>
