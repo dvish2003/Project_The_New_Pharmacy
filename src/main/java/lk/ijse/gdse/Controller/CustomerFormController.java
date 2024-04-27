@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -65,6 +66,43 @@ public class CustomerFormController {
     public void initialize(){
         setCellValueFactory();
         loadAllCustomers();
+
+        txtId.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                txtName.requestFocus();
+            }
+        });
+
+        txtName.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                txtNICNo.requestFocus();
+            }
+        });
+
+        txtNICNo.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                txtAddress.requestFocus();
+            }
+        });
+        txtAddress.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                txtTel.requestFocus();
+            }
+        });
+
+        tblCustomer.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+
+                txtId.setText(newSelection.getCuId());
+                txtName.setText(newSelection.getName());
+                txtNICNo.setText(newSelection.getNicNo());
+                txtAddress.setText(newSelection.getAddress());
+                txtTel.setText(newSelection.getTel());
+
+            }
+        });
+
+
     }
 
     private void loadAllCustomers() {

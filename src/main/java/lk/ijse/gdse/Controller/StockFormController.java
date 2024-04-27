@@ -1,23 +1,84 @@
 package lk.ijse.gdse.Controller;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 
 public class StockFormController {
-    public void btnSaveOnAction(ActionEvent actionEvent) {
+
+    @FXML
+    private JFXButton btnClear;
+
+    @FXML
+    private JFXButton btnDashboard;
+
+    @FXML
+    private JFXButton btnDelete;
+
+    @FXML
+    private JFXButton btnSave;
+
+    @FXML
+    private JFXButton btnUpdate;
+
+    @FXML
+    private ChoiceBox<?> choiceMethod;
+
+    @FXML
+    private TableColumn<?, ?> colAmount;
+
+    @FXML
+    private TableColumn<?, ?> colDate;
+
+    @FXML
+    private TableColumn<?, ?> colId;
+
+    @FXML
+    private TableColumn<?, ?> colMethod;
+
+    @FXML
+    private AnchorPane root;
+
+    @FXML
+    private TableView<?> tblItem;
+
+    @FXML
+    private TextField txtAmount;
+
+    @FXML
+    private TextField txtDate;
+
+    @FXML
+    private TextField txtId;
+
+    @FXML
+    void btnClearOnAction(ActionEvent event) {
+
     }
 
-    public void btnUpdateOnAction(ActionEvent actionEvent) {
+    @FXML
+    void btnDashboardOnAction(ActionEvent event) {
+
     }
 
-    public void btnDeleteOnAction(ActionEvent actionEvent) {
+    @FXML
+    void btnDeleteOnAction(ActionEvent event) {
+
     }
 
-    public void btnClearOnAction(ActionEvent actionEvent) {
+    @FXML
+    void btnSaveOnAction(ActionEvent event) {
+
     }
 
-    public void btnDashboardOnAction(ActionEvent actionEvent) {
+    @FXML
+    void btnUpdateOnAction(ActionEvent event) {
+
     }
 
-    public void comStockIdOnAction(ActionEvent actionEvent) {
-    }
 }

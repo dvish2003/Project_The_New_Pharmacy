@@ -18,8 +18,8 @@ public class CustomerRepo {
 
         pstm.setObject(1, customer.getCuId());
         pstm.setObject(2, customer.getName());
-        pstm.setObject(4, customer.getNicNo());
-        pstm.setObject(3, customer.getAddress());
+        pstm.setObject(3, customer.getNicNo());
+        pstm.setObject(4, customer.getAddress());
         pstm.setObject(5, customer.getTel());
 
         return pstm.executeUpdate() > 0;
@@ -36,8 +36,8 @@ public class CustomerRepo {
         while (resultSet.next()) {
             String id = resultSet.getString(1);
             String name = resultSet.getString(2);
-            String nicNo = resultSet.getString(4);
-            String address = resultSet.getString(3);
+            String nicNo = resultSet.getString(3);
+            String address = resultSet.getString(4);
             String tel = resultSet.getString(5);
 
             Customer customer = new Customer(id, name, nicNo, address, tel);
@@ -60,8 +60,8 @@ public class CustomerRepo {
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
         pstm.setObject(1,customer.getName());
-        pstm.setObject(3,customer.getNicNo());
-        pstm.setObject(2,customer.getAddress());
+        pstm.setObject(2,customer.getNicNo());
+        pstm.setObject(3,customer.getAddress());
         pstm.setObject(4,customer.getTel());
         pstm.setObject(5,customer.getCuId());
 

@@ -11,5 +11,4 @@ public class Stock {
     private String stockId;
     private String description;
     private String category;
-    private int qtyOnHand;
 }

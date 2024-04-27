@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 
 @AllArgsConstructor
@@ -12,8 +11,8 @@ import java.sql.Date;
 @Data
 public class Payment {
     private String payId;
-    private String description;
-    private BigDecimal price;
+    private String method;
+    private double amount;
     private Date date;
 }
 
