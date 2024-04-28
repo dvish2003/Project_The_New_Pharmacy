@@ -1,4 +1,3 @@
-
 package lk.ijse.gdse.Controller;
 
 import com.jfoenix.controls.JFXButton;
@@ -6,25 +5,30 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-import lk.ijse.gdse.repository.CustomerRepo;
-import lk.ijse.gdse.repository.ItemRepo;
-import lk.ijse.gdse.repository.OrderRepo;
+import lk.ijse.gdse.model.CartTm;
+import lk.ijse.gdse.model.Customer;
+import lk.ijse.gdse.model.Employee;
+import lk.ijse.gdse.model.Item;
+import lk.ijse.gdse.repository.*;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public class OrderPlacementFormController {
 
     @FXML
+    private TableColumn<?, ?> colAction;
+
+    @FXML
     private JFXButton btnAddCustomer;
+
+    @FXML
+    private JFXButton btnAddEmployee;
 
     @FXML
     private JFXButton btnAddToCart;
@@ -34,6 +38,9 @@ public class OrderPlacementFormController {
 
     @FXML
     private JFXButton btnDashboard;
+
+    @FXML
+    private JFXButton btnPlaceOrder;
 
     @FXML
     private TableColumn<?, ?> colAmount;
@@ -54,7 +61,16 @@ public class OrderPlacementFormController {
     private ComboBox<String> comCustomerId;
 
     @FXML
+    private ComboBox<String> comEmployeeId;
+
+    @FXML
     private ComboBox<String> comItemId;
+
+    @FXML
+    private Label lblCustomerName;
+
+    @FXML
+    private Label lblEmployeeName;
 
     @FXML
     private Label lblItemDescription;
@@ -66,7 +82,13 @@ public class OrderPlacementFormController {
     private Label lblOrderId;
 
     @FXML
-    private Label lblQtyOnHand;
+    private Label lblPayId;
+
+    @FXML
+    private Label lblAmount;
+
+    @FXML
+    private Label lblQty;
 
     @FXML
     private Label lblUnitPrice;
@@ -75,86 +97,117 @@ public class OrderPlacementFormController {
     private AnchorPane root;
 
     @FXML
-    private TableView<?> tblOrderPlacement;
+    private TableView<CartTm> tblOrderPlacement;
 
     @FXML
     private TextField txtQty;
-
+    private ObservableList<CartTm> obList = FXCollections.observableArrayList();
     public void initialize() {
         setDate();
         getCurrentOrderId();
+        getCurrentPayId();
         getCustomerIds();
+        getEmployeeIds();
         getItemIds();
-        setCellValueFactory();
     }
 
-    private void setCellValueFactory() {
-        colId.setCellValueFactory(new PropertyValueFactory<>("orderId"));
-        colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
-        colAmount.setCellValueFactory(new PropertyValueFactory<>("paymentAmount"));
-        colQty.setCellValueFactory(new PropertyValueFactory<>(""));
-        colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+    private void setDate() {
+        LocalDate now = LocalDate.now();
+        lblOrderDate.setText(String.valueOf(now));
+
     }
-
-    private void getItemIds() {
-        ObservableList<String> obList = FXCollections.observableArrayList();
-        try {
-           List<String> idList = ItemRepo.getIds();
-
-           for (String id : idList){
-               obList.add(id);
-           }
-           comItemId.setItems(obList);
-
-        }catch (SQLException e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void getCustomerIds() {
-        ObservableList<String> obList = FXCollections.observableArrayList();
+    private void getCurrentOrderId() {
 
         try {
-            List<String> idList = CustomerRepo.getId();
-
-            for (String id : idList){
-                obList.add(id);
-            }
-            comCustomerId.setItems(obList);
+            String currentId = OrderRepo.getCurrentId();
+            String nextOrderId = generateNextOrderId(currentId);
+            lblOrderId.setText(nextOrderId);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void getCurrentOrderId() {
+    private String generateNextOrderId(String currentId) {
+        if (currentId != null && currentId.startsWith("ORD")) {
+            int idNum = Integer.parseInt(currentId.substring(3)) + 1;
+            return "ORD" + String.format("%03d", idNum);
+        }
+        return "ORD001";
+    }
+    private void getCurrentPayId() {
         try {
-            String currentId = OrderRepo.getCurrentId();
+            String currentId = PaymentRepo.getPayCurrentId();
+            String nextPayId = generateNextPay(currentId);
+            lblPayId.setText(nextPayId);
 
-            String nextId = generateNextOrderId(currentId);
-            lblOrderId.setText(nextId);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private String generateNextOrderId(String currentId) {
-        if (currentId != null) {
-            String[] split = currentId.split("0");
-            int idNo = Integer.parseInt(split[1]);
-            return "0" + ++idNo;
+    private String generateNextPay(String currentId) {
+        if (currentId != null && currentId.startsWith("PAY")) {
+            try {
+                int idNum = Integer.parseInt(currentId.substring(3)) + 1;
+                return "PAY" + String.format("%03d", idNum);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid current payment ID format");
+            }
         }
-        return "01";
+        return "PAY001";
     }
 
-    private void setDate() {
-        LocalDate now = LocalDate.now();
-        lblOrderDate.setText(String.valueOf(now));
-    }
+
+
+
 
     @FXML
     void btnAddCustomerOnAction(ActionEvent event) {
+        String I_Id = comItemId.getValue();
+        String Description = lblItemDescription.getText();
+        double Unit_Price = Double.parseDouble(lblUnitPrice.getText());
+        int Qty = Integer.parseInt(txtQty.getText());
+        double Amount = Unit_Price * Qty;
 
+        JFXButton btnRemove = new JFXButton("remove");
+        btnRemove.setCursor(Cursor.HAND);
+        btnRemove.setOnAction((e) -> {
+            ButtonType yes = new ButtonType("yes", ButtonBar.ButtonData.OK_DONE);
+            ButtonType no = new ButtonType("no", ButtonBar.ButtonData.CANCEL_CLOSE);
+            Optional<ButtonType> type = new Alert(Alert.AlertType.INFORMATION, "Are you sure to remove?", yes, no).showAndWait();
+
+            if (type.orElse(no) == yes) {
+                int selectedIndex = tblOrderPlacement.getSelectionModel().getSelectedIndex();
+                obList.remove(selectedIndex);
+                tblOrderPlacement.refresh();
+                calculateNetTotal();
+            }
+        });
+
+        for (int i = 0; i < tblOrderPlacement.getItems().size(); i++) {
+            if(I_Id.equals(colId.getCellData(i))){
+                CartTm tm = obList.get(i);
+                Qty += tm.();
+                Amount = Qty*Unit_Price;
+                tm.
+            }
+        }
+
+        CartTm tm = new CartTm(I_Id, Description, Qty, Unit_Price, Amount, btnRemove);
+        obList.add(tm);
+        tblOrderPlacement.setItems(obList);
+        calculateNetTotal();
+        txtQty.setText("");
+    }
+
+
+    private void calculateNetTotal() {
+        int netTotal = 0;
+        for (int i = 0; i < tblOrderPlacement.getItems().size(); i++) {
+            netTotal += (int) colAmount.getCellData(i);
+        }
+        lblAmount.setText(String.valueOf(netTotal));
     }
 
     @FXML
@@ -168,14 +221,108 @@ public class OrderPlacementFormController {
     }
 
     @FXML
-    void btnDashBoardOnAction(ActionEvent event) throws IOException {
-        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("view/dashboard_form.fxml"));
-        Stage stage = (Stage) root.getScene().getWindow();
+    void btnDashBoardOnAction(ActionEvent event) {
 
-        stage.setScene(new Scene(anchorPane));
-        stage.setTitle("Dashboard Form");
-        stage.centerOnScreen();
+    }
+
+    @FXML
+    void btnPlaceOrderOnAction(ActionEvent event) {
+
+    }
+    private void getCustomerIds() {
+        ObservableList<String> obList = FXCollections.observableArrayList();
+
+        try {
+            List<String> idList = CustomerRepo.getId();
+
+            for(String id : idList) {
+                obList.add(id);
+            }
+
+            comCustomerId.setItems(obList);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private void getEmployeeIds() {
+        ObservableList<String> obList = FXCollections.observableArrayList();
+
+        try {
+            List<String> idList = EmployeeRepo.getId();
+
+            for(String id : idList) {
+                obList.add(id);
+            }
+
+            comEmployeeId.setItems(obList);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private void getItemIds() {
+        ObservableList<String> obList = FXCollections.observableArrayList();
+
+        try {
+            List<String> idList = ItemRepo.getIds();
+
+            for(String id : idList) {
+                obList.add(id);
+            }
+
+            comItemId.setItems(obList);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML
+    void comCustomerIdOnActiion(ActionEvent event) {
+        String id = comCustomerId.getValue();
+        try {
+            Customer customer = CustomerRepo.searchById(id);
+
+            lblCustomerName.setText(customer.getName());
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    void comEmployeeIdOnAction(ActionEvent event) {
+        String id =  comEmployeeId.getValue();
+        try {
+            Employee employee = EmployeeRepo.searchById(id);
+
+            lblEmployeeName.setText(employee.getName());
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML
+    void comItemIdOnAction(ActionEvent event) {
+        String id = String.valueOf(comItemId.getValue());
+        try {
+            Item item = ItemRepo.searchById(id);
+
+            assert item != null;
+            lblItemDescription.setText(item.getDescription());
+            lblUnitPrice.setText(String.valueOf(item.getUnitPrice()));
+            lblQty.setText(String.valueOf(item.getQtyOnHand()));
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private void showAlert(Alert.AlertType alertType, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 }
+
 

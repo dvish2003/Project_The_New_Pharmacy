@@ -18,8 +18,8 @@ public class EmployeeRepo {
 
         pstm.setObject(1, employee.getEmployeeId());
         pstm.setObject(2, employee.getName());
-        pstm.setObject(4, employee.getNICNo());
-        pstm.setObject(3, employee.getAddress());
+        pstm.setObject(3, employee.getNICNo());
+        pstm.setObject(4, employee.getAddress());
         pstm.setObject(5, employee.getTel());
         pstm.setObject(6, employee.getSalary());
 
@@ -62,8 +62,8 @@ public class EmployeeRepo {
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
         pstm.setObject(1,employee.getName());
-        pstm.setObject(3,employee.getNICNo());
-        pstm.setObject(2,employee.getAddress());
+        pstm.setObject(2,employee.getNICNo());
+        pstm.setObject(3,employee.getAddress());
         pstm.setObject(4,employee.getTel());
         pstm.setObject(5,employee.getSalary());
         pstm.setObject(6,employee.getEmployeeId());

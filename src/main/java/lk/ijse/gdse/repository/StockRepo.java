@@ -55,8 +55,8 @@ public class StockRepo {
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
         pstm.setObject(1,stock.getDescription());
-        pstm.setObject(3,stock.getCategory());
-        pstm.setObject(2,stock.getStockId());
+        pstm.setObject(2,stock.getCategory());
+        pstm.setObject(3,stock.getStockId());
 
 
         return pstm.executeUpdate() > 0;

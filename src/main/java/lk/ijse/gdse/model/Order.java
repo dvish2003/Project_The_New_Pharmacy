@@ -12,7 +12,6 @@ import java.sql.Date;
 @Data
 public class Order {
     private String orderId;
-
     private String description;
     private BigDecimal paymentAmount;
     private Date date;

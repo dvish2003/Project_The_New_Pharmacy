@@ -18,12 +18,13 @@ public class ItemRepo {
 
         pstm.setObject(1, item.getItemId());
         pstm.setObject(2, item.getDescription());
-        pstm.setObject(4, item.getScale());
         pstm.setObject(3, item.getUnitPrice());
+        pstm.setObject(4, item.getQtyOnHand());
         pstm.setObject(5, item.getStockId());
 
         return pstm.executeUpdate() > 0;
     }
+
 
     public static List<Item> getAll() throws SQLException {
         String sql = "SELECT*FROM item";
@@ -36,11 +37,11 @@ public class ItemRepo {
         while (resultSet.next()) {
             String id = resultSet.getString(1);
             String description = resultSet.getString(2);
-            String scale = resultSet.getString(4);
             double unitePrice = Double.parseDouble(resultSet.getString(3));
+            int qtyOnHand = Integer.parseInt(resultSet.getString(4));
             String stockId = resultSet.getString(5);
 
-            Item item = new Item(id, description, scale, unitePrice, stockId);
+            Item item = new Item(id, description, unitePrice,qtyOnHand, stockId);
             itemList.add(item);
         }
         return itemList;
@@ -56,12 +57,12 @@ public class ItemRepo {
     }
 
     public static boolean update(Item item) throws SQLException {
-        String sql = "UPDATE item SET description = ? , scale = ? , unitPrice = ? , stockId = ? WHERE itemId = ?";
+        String sql = "UPDATE item SET description = ? , qtyOnHand = ? , unitPrice = ? , stockId = ? WHERE itemId = ?";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
         pstm.setObject(1,item.getDescription());
-        pstm.setObject(3,item.getScale());
-        pstm.setObject(2,item.getUnitPrice());
+        pstm.setObject(2,item.getQtyOnHand());
+        pstm.setObject(3,item.getUnitPrice());
         pstm.setObject(4,item.getStockId());
         pstm.setObject(5,item.getItemId());
 
@@ -74,26 +75,30 @@ public class ItemRepo {
 
         ArrayList<String> idList = new ArrayList<>();
         while (resultSet.next()){
-            idList.add(resultSet.getString(1));
+            String id = resultSet.getString(1);
+            idList.add(id);
+
         }
         return idList;
     }
 
     public static Item searchById(String id) throws SQLException {
-        String sql = "SELECT *FROM item WHERE id = ?";
-        PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
+        String sql = "SELECT * FROM item WHERE id = ?";
+        Connection connection = DbConnection.getInstance().getConnection();
+        PreparedStatement pstm = connection.prepareStatement(sql);
+        pstm.setString(1, id);
+        ResultSet rs = pstm.executeQuery();
+        if (rs.next()) {
+            String itemId = rs.getString(1);
+            String description = rs.getString(2);
+            double unitPrice = rs.getDouble(3);
+            int qtyOnHand = rs.getInt(4);
+            String stockId = rs.getString(5);
 
-        pstm.setObject(1,id);
-        ResultSet resultSet = pstm.executeQuery();
-        if (resultSet.next()) {
-            return new Item(
-                    resultSet.getString(1),
-                    resultSet.getString(2),
-                    resultSet.getString(3),
-                    resultSet.getDouble(4),
-                    resultSet.getString(5)
-            );
+            Item item = new Item(itemId, description, unitPrice, qtyOnHand, stockId);
+            return item;
         }
         return null;
     }
+
 }
