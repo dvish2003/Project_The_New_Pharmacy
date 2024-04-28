@@ -1,6 +1,8 @@
 package lk.ijse.gdse.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,6 +11,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 import lk.ijse.gdse.model.*;
 import lk.ijse.gdse.repository.*;
 
@@ -110,11 +113,63 @@ public class OrderPlacementFormController {
         getEmployeeIds();
         getItemIds();
         setCellValueFactory();
-        loadAllId();
+        applyButtonAnimations();
+        applyLabelAnimations();
     }
 
-    private void loadAllId() {
+    private void applyButtonAnimations() {
+        applyAnimation(btnAddToCart);
+        applyAnimation(btnClear);
+        applyAnimation(btnPlaceOrder);
+        applyAnimation(btnDashboard);
+        applyAnimation(btnAddEmployee);
+        applyAnimation(btnAddCustomer);
 
+
+    }
+
+    private void applyLabelAnimations() {
+        applyAnimation(lblCustomerName);
+        applyAnimation(lblAmount);
+        applyAnimation(lblOrderDate);
+        applyAnimation(lblEmployeeName);
+        applyAnimation(lblItemDescription);
+        applyAnimation(lblOrderId);
+        applyAnimation(lblUnitPrice);
+        applyAnimation(lblQty);
+        applyAnimation(lblPayId);
+
+
+
+
+    }
+
+    private void applyAnimation(Button button) {
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), button);
+        button.setOnMouseEntered(event -> {
+            scaleTransition.setToX(1.1);
+            scaleTransition.setToY(1.1);
+            scaleTransition.play();
+        });
+        button.setOnMouseExited(event -> {
+            scaleTransition.setToX(1);
+            scaleTransition.setToY(1);
+            scaleTransition.play();
+        });
+    }
+
+    private void applyAnimation(Label label) {
+        FadeTransition fadeTransition = new FadeTransition(Duration.millis(500), label);
+        label.setOnMouseEntered(event -> {
+            fadeTransition.setFromValue(1);
+            fadeTransition.setToValue(0.5);
+            fadeTransition.play();
+        });
+        label.setOnMouseExited(event -> {
+            fadeTransition.setFromValue(0.5);
+            fadeTransition.setToValue(1);
+            fadeTransition.play();
+        });
     }
 
     private void setCellValueFactory() {
@@ -241,6 +296,14 @@ public class OrderPlacementFormController {
     @FXML
     void btnClearOnAction(ActionEvent event) {
 
+
+        lblCustomerName.setText("");
+        lblEmployeeName.setText("");
+        lblItemDescription.setText("");
+        lblOrderDate.setText("");
+        lblAmount.setText("");
+        lblQty.setText("");
+        lblUnitPrice.setText("");
     }
 
     @FXML
