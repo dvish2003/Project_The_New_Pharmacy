@@ -12,7 +12,7 @@ public class DbConnection {
         connection = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/theNewPharmacy",
                 "root",
-                "Ijse@123"
+                "Ijse@1234"
         );
     }
 

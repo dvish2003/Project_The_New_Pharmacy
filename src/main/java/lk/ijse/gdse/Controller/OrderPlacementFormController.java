@@ -7,15 +7,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import lk.ijse.gdse.model.CartTm;
-import lk.ijse.gdse.model.Customer;
-import lk.ijse.gdse.model.Employee;
-import lk.ijse.gdse.model.Item;
+import lk.ijse.gdse.model.*;
 import lk.ijse.gdse.repository.*;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -109,6 +109,21 @@ public class OrderPlacementFormController {
         getCustomerIds();
         getEmployeeIds();
         getItemIds();
+        setCellValueFactory();
+        loadAllId();
+    }
+
+    private void loadAllId() {
+
+    }
+
+    private void setCellValueFactory() {
+      colId.setCellValueFactory(new PropertyValueFactory<>("I_ID"));
+       colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+       colQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
+      colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        colAmount.setCellValueFactory(new PropertyValueFactory<>("Amount"));
+      colAction.setCellValueFactory(new PropertyValueFactory<>("btnRemove"));
     }
 
     private void setDate() {
@@ -164,6 +179,14 @@ public class OrderPlacementFormController {
 
     @FXML
     void btnAddCustomerOnAction(ActionEvent event) {
+
+    }
+
+
+
+
+    @FXML
+    void btnAddToCartOnAction(ActionEvent event) {
         String I_Id = comItemId.getValue();
         String Description = lblItemDescription.getText();
         double Unit_Price = Double.parseDouble(lblUnitPrice.getText());
@@ -178,19 +201,25 @@ public class OrderPlacementFormController {
             Optional<ButtonType> type = new Alert(Alert.AlertType.INFORMATION, "Are you sure to remove?", yes, no).showAndWait();
 
             if (type.orElse(no) == yes) {
-                int selectedIndex = tblOrderPlacement.getSelectionModel().getSelectedIndex();
+                CartTm selectedIndex = tblOrderPlacement.getSelectionModel().getSelectedItem();
                 obList.remove(selectedIndex);
+
                 tblOrderPlacement.refresh();
                 calculateNetTotal();
             }
         });
 
         for (int i = 0; i < tblOrderPlacement.getItems().size(); i++) {
-            if(I_Id.equals(colId.getCellData(i))){
+            if (I_Id.equals(colId.getCellData(i))) {
                 CartTm tm = obList.get(i);
-                Qty += tm.();
-                Amount = Qty*Unit_Price;
-                tm.
+                Qty += tm.getQty();
+                Amount = Qty * Unit_Price;
+                tm.setQty(Qty);
+                tm.setAmount(Amount);
+
+                tblOrderPlacement.refresh();
+                calculateNetTotal();
+                return;
             }
         }
 
@@ -201,18 +230,12 @@ public class OrderPlacementFormController {
         txtQty.setText("");
     }
 
-
     private void calculateNetTotal() {
-        int netTotal = 0;
+        double netTotal = 0;
         for (int i = 0; i < tblOrderPlacement.getItems().size(); i++) {
-            netTotal += (int) colAmount.getCellData(i);
+            netTotal += (double) colAmount.getCellData(i);
         }
         lblAmount.setText(String.valueOf(netTotal));
-    }
-
-    @FXML
-    void btnAddToCartOnAction(ActionEvent event) {
-
     }
 
     @FXML
@@ -226,8 +249,48 @@ public class OrderPlacementFormController {
     }
 
     @FXML
-    void btnPlaceOrderOnAction(ActionEvent event) {
+    void btnPlaceOrderOnAction(ActionEvent event) throws SQLException {
+        String orderID = lblOrderId.getText();
+        String customerID = comCustomerId.getValue();
+        String EmployeeID = comEmployeeId.getValue();
+        String paymentID = lblPayId.getText();
+        String desc  = lblItemDescription.getText();
+        Date date = Date.valueOf(LocalDate.now());
+        double Amount = Double.parseDouble(lblAmount.getText());
+        String PayMethod = "Cash";
 
+
+        Order order = new Order(orderID,desc,Amount,date,customerID,paymentID,EmployeeID);
+        List<OrderDetails> odList = new ArrayList<>();
+
+        for (int i = 0; i < tblOrderPlacement.getItems().size(); i++) {
+            CartTm tm = obList.get(i);
+            OrderDetails od = new OrderDetails(
+                    tm.getI_ID(),
+                    orderID,
+                    tm.getQty(),
+                    tm.getUnitPrice()
+
+            );
+
+            odList.add(od);
+
+        }
+
+        Payment payment = new Payment(paymentID,PayMethod,Amount, date);
+        PlaceOrder po = new PlaceOrder(order, odList, payment);
+
+        boolean isPlaced = PlaceOrderRepo.placeOrder(po);
+        if (isPlaced) {
+            obList.clear();
+            txtQty.clear();
+            getCurrentOrderId();
+            getCurrentPayId();
+
+            new Alert(Alert.AlertType.CONFIRMATION, "Order Placed!").show();
+        } else {
+            new Alert(Alert.AlertType.WARNING, "Order Placed Unsuccessfully!").show();
+        }
     }
     private void getCustomerIds() {
         ObservableList<String> obList = FXCollections.observableArrayList();
@@ -308,7 +371,6 @@ public class OrderPlacementFormController {
         try {
             Item item = ItemRepo.searchById(id);
 
-            assert item != null;
             lblItemDescription.setText(item.getDescription());
             lblUnitPrice.setText(String.valueOf(item.getUnitPrice()));
             lblQty.setText(String.valueOf(item.getQtyOnHand()));
@@ -324,5 +386,3 @@ public class OrderPlacementFormController {
     }
 
 }
-
-

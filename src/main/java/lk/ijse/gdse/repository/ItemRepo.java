@@ -2,6 +2,7 @@ package lk.ijse.gdse.repository;
 
 import lk.ijse.gdse.DB.DbConnection;
 import lk.ijse.gdse.model.Item;
+import lk.ijse.gdse.model.OrderDetails;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -83,7 +84,7 @@ public class ItemRepo {
     }
 
     public static Item searchById(String id) throws SQLException {
-        String sql = "SELECT * FROM item WHERE id = ?";
+        String sql = "SELECT * FROM item WHERE itemId = ?";
         Connection connection = DbConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setString(1, id);
@@ -101,4 +102,26 @@ public class ItemRepo {
         return null;
     }
 
+
+    public static boolean update1(List<OrderDetails> odList) throws SQLException {
+        for (OrderDetails od : odList) {
+            boolean isUpdateQty = updateQty(od.getItemId(), od.getQty());
+            if(!isUpdateQty) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean updateQty(String Id, int qty) throws SQLException {
+        String sql = "UPDATE item SET qtyOnHand = qtyOnHand - ? WHERE itemId = ?";
+
+        PreparedStatement pstm = DbConnection.getInstance().getConnection()
+                .prepareStatement(sql);
+
+        pstm.setInt(1, qty);
+        pstm.setString(2, Id);
+
+        return pstm.executeUpdate() > 0;
+    }
 }

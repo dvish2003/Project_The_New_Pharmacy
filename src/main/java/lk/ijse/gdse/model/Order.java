@@ -13,7 +13,7 @@ import java.sql.Date;
 public class Order {
     private String orderId;
     private String description;
-    private BigDecimal paymentAmount;
+    private double paymentAmount;
     private Date date;
     private String cuId;
     private String payId;

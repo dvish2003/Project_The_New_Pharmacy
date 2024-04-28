@@ -1,8 +1,16 @@
 package lk.ijse.gdse.model;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class PlaceOrder {
     private Order order;
     private List<OrderDetails> odList;
+    private Payment payment;
+
 }
