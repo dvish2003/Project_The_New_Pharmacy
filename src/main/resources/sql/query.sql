@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS supplier (
     );
 
 CREATE TABLE IF NOT EXISTS stock (
-                                     stockId VARCHAR(10) PRIMARY KEY,
+    stockId VARCHAR(10) PRIMARY KEY,
     description VARCHAR(50),
     category VARCHAR(50)
     );
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS supplierDetails (
     );
 
 CREATE TABLE IF NOT EXISTS item (
-                                    itemId VARCHAR(10) PRIMARY KEY,
+    itemId VARCHAR(10) PRIMARY KEY,
     description VARCHAR(50),
     unitPrice DECIMAL(10,2),
     qtyOnHand INT, -- Removed size specification for INT

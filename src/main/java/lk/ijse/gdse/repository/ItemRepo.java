@@ -48,6 +48,7 @@ public class ItemRepo {
         return itemList;
     }
 
+
     public static boolean delete(String id) throws SQLException {
         String sql = "DELETE FROM item WHERE itemId = ?";
 
